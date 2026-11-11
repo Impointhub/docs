@@ -1,0 +1,55 @@
+---
+title: "5.3 Delete Comment"
+sidebarTitle: "5.3 Delete Comment"
+description: "Alur proses dan acceptance criteria menghapus komentar."
+---
+
+## Mindmap alur
+
+```mermaid
+flowchart TB
+  A(["1.0 Start"]) --> B["2.0 User on the Thinkaction feed page"]
+  B --> C{"3.0 User is logged in"}
+  C -- Yes --> D["4.0 User has commented on the goal of @tigermom"]
+  C -- No --> F1(["5.3F1 User cannot delete a comment when not logged in"])
+  D --> E["5.0 User clicks the comment button"]
+  E --> F["6.0 User clicks the trash can icon on the comment"]
+  F --> S1(["5.3S1 Comment is removed from the comment list"])
+```
+
+| Process No. | Type | Process / Validation | Yes → Next | No → Next | End? |
+| --- | --- | --- | --- | --- | --- |
+| 1.0 | Start | Start | 2.0 |  | No |
+| 2.0 | Process | User on the Thinkaction feed page | 3.0 |  | No |
+| 3.0 | Validation | User is logged in | 4.0 | 5.3F1 User cannot delete a comment when not logged in | Yes |
+| 4.0 | Process | User has commented on the goal of @tigermom | 5.0 |  | No |
+| 5.0 | Process | User clicks the comment button | 6.0 |  | No |
+| 6.0 | Process | User clicks the "trash can" icon on the comment | 5.3S1 Comment is removed from the comment list |  | Yes |
+
+## Acceptance criteria
+
+### 5.3F1 User cannot delete a comment when not logged in
+
+| Step | Gherkin step | Mockup |
+| --- | --- | --- |
+| 1.0 | Given user is not logged in to the Thinkaction app |  |
+| 2.0 | When user opens the Thinkaction feed page |  |
+| 3.0 | And user opens the comment section of a goal |  |
+| 4.0 | Then the comment list is displayed without the trash can icon |  |
+
+### 5.3S1 User deletes own comment and the comment is removed from the comment list
+
+| Step | Gherkin step | Mockup |
+| --- | --- | --- |
+| 1.0 | Given user @nraini is logged in to the Thinkaction app |  |
+| 2.0 | And user @nraini has commented on the goal of @tigermom | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/komentar-00-halaman-goal.png" alt="Halaman goal @tigermom" /> |
+| 3.0 | When user clicks the comment button on the goal of @tigermom |  |
+| 4.0 | Then the comment list is displayed with the trash can icon on the comment of @nraini | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/komentar-01-daftar-komentar.png" alt="Daftar komentar dengan ikon tempat sampah" /> |
+| 5.0 | When user clicks the trash can icon on the comment of @nraini |  |
+| 6.0 | Then the system shows "Comment deleted" with an "Undo" button for 5 seconds | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/hapus-02-komentar-dihapus-undo.png" alt="Comment deleted dengan tombol Undo" /> |
+| 7.0 | And the system removes the comment from the comment list after 5 seconds | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/hapus-03-komentar-hilang.png" alt="Komentar hilang dari daftar" /> |
+
+## Referensi
+
+- Penulis komentar bisa menghapus komentarnya sendiri. Pemilik goal bisa menghapus semua komentar di goalnya.
+- Tombol "Undo" membatalkan penghapusan selama 5 detik pertama.

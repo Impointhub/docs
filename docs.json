@@ -30,6 +30,16 @@
           "general-ledger/export-general-ledger",
           "general-ledger/database"
         ]
+      },
+      {
+        "group": "Thinkaction",
+        "pages": [
+          "thinkaction/overview",
+          "thinkaction/embed-photo-unsplash",
+          "thinkaction/delete-comment",
+          "thinkaction/multiple-tagging",
+          "thinkaction/comment-on-progress"
+        ]
       }
     ]
   },

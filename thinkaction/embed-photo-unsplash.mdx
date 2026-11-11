@@ -1,0 +1,90 @@
+---
+title: "6.5 Embed Photo Unsplash"
+sidebarTitle: "6.5 Embed Photo Unsplash"
+description: "Alur proses dan acceptance criteria memilih foto vision goal dari Unsplash saat membuat goal."
+---
+
+## Mindmap alur
+
+```mermaid
+flowchart TB
+  A(["1.0 Start"]) --> B["2.0 User on the Thinkaction feed page"]
+  B --> C{"3.0 User is logged in"}
+  C -- Yes --> D["4.0 User clicks Create Goals"]
+  C -- No --> F1(["6.5F1 User cannot see the Create Goals button"])
+  D --> E["5.0 User fills in the Create Goals form"]
+  E --> V{"6.0 Required fields are filled"}
+  V -- Yes --> G["7.0 User clicks Next"]
+  V -- No --> F2(["6.5F2 Notification: Please complete all form before continue"])
+  G --> H["8.0 Unsplash photos appear based on the goal keywords"]
+  H --> I["9.0 User selects a photo"]
+  I --> J["10.0 User clicks Next"]
+  J --> K["11.0 User edits the cover"]
+  K --> L["12.0 User selects privacy"]
+  L --> M["13.0 User clicks Post"]
+  M --> S1(["6.5S1 Goal is created and user is redirected to the feed page"])
+```
+
+| Process No. | Type | Process / Validation | Yes → Next | No → Next | End? |
+| --- | --- | --- | --- | --- | --- |
+| 1.0 | Start | Start | 2.0 |  | No |
+| 2.0 | Process | User on the Thinkaction feed page | 3.0 |  | No |
+| 3.0 | Validation | User is logged in | 4.0 | 6.5F1 User cannot see the "Create Goals" button | Yes |
+| 4.0 | Process | User clicks the "Create Goals" button | 5.0 |  | No |
+| 5.0 | Process | User enters data into the "Create Goals" form | 6.0 |  | No |
+| 6.0 | Validation | User has filled in the required data | 7.0 | 6.5F2 User sees notification "Please complete all form before continue" | Yes |
+| 7.0 | Process | User clicks "Next"; keywords from the "Next week, I want to" field appear immediately as search keywords on Unsplash | 8.0 |  | No |
+| 8.0 | Process | User views the Unsplash photo references | 9.0 |  | No |
+| 9.0 | Process | User selects a photo from Unsplash | 10.0 |  | No |
+| 10.0 | Process | User clicks "Next" | 11.0 |  | No |
+| 11.0 | Process | User edits the cover of the photo | 12.0 |  | No |
+| 12.0 | Process | User selects the "privacy" visibility of the goal | 13.0 |  | No |
+| 13.0 | Process | User clicks "Post" | 6.5S1 User successfully creates a goal and is redirected to the feed page |  | Yes |
+
+## Acceptance criteria
+
+### 6.5F1 User cannot see the "Create Goals" button
+
+| Step | Gherkin step | Mockup |
+| --- | --- | --- |
+| 1.0 | Given user is not logged in to the Thinkaction app |  |
+| 2.0 | When user opens the Thinkaction feed page |  |
+| 3.0 | Then the feed page is displayed without the "Create Goals" button |  |
+
+### 6.5F2 User sees notification "Please complete all form before continue"
+
+| Step | Gherkin step | Mockup |
+| --- | --- | --- |
+| 1.0 | Given user is logged in to the Thinkaction app |  |
+| 2.0 | And user is on the feed page |  |
+| 3.0 | When user clicks the "Create Goals" button |  |
+| 4.0 | Then the "Create Goals" form is displayed | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/goal-01-form-kosong.png" alt="Form Create Goals kosong" /> |
+| 5.0 | When user leaves one or more required fields empty |  |
+| 6.0 | And user clicks "Next" |  |
+| 7.0 | Then the system shows the notification "Please complete all form before continue" |  |
+| 8.0 | And the system stays on the "Create Goals" form |  |
+
+### 6.5S1 User successfully creates a goal with an Unsplash photo and is redirected to the feed page
+
+| Step | Gherkin step | Mockup |
+| --- | --- | --- |
+| 1.0 | Given user is logged in to the Thinkaction app |  |
+| 2.0 | And user is on the feed page |  |
+| 3.0 | When user clicks the "Create Goals" button |  |
+| 4.0 | And user fills in all required fields of the "Create Goals" form | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/goal-02-form-terisi.png" alt="Form Create Goals terisi" /> |
+| 5.0 | And user clicks "Next" |  |
+| 6.0 | Then the system shows Unsplash photos based on the keywords from the "Next week, I want to" field | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/goal-03-picker-unsplash.png" alt="Daftar foto Unsplash" /> |
+| 7.0 | When user selects one Unsplash photo | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/goal-04-foto-dipilih.png" alt="Foto Unsplash dipilih" /> |
+| 8.0 | And user clicks "Next" |  |
+| 9.0 | Then the system shows the cover editor with the selected photo and the photographer credit | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/goal-05-edit-cover.png" alt="Edit cover" /> |
+| 10.0 | When user edits the cover and clicks "Next" |  |
+| 11.0 | Then the system shows the privacy options | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/goal-06-privacy.png" alt="Pilihan privacy" /> |
+| 12.0 | When user selects a privacy option |  |
+| 13.0 | And user clicks "Post" |  |
+| 14.0 | Then the system creates the goal | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/goal-07-berhasil-posting.png" alt="Goal berhasil diposting" /> |
+| 15.0 | And the system redirects the user to the feed page |  |
+
+## Referensi
+
+- Foto yang dipilih dari Unsplash disimpan sebagai `thumbnail_url` goal, dengan nama dan link fotografer sebagai atribusi.
+- Pilihan "Upload" dan "Skip for now" pada pemilih foto belum punya skenario sendiri.
