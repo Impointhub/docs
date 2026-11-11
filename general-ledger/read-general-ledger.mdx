@@ -32,17 +32,13 @@ flowchart TB
 
 ## Acceptance criteria
 
-<Note>
-  Kolom **Mockup** menunjuk ke file screenshot (`ac-XX`) yang dikirim terpisah dan perlu diunggah ke halaman ini.
-</Note>
-
 ### 24.1F1 User redirect to login page
 
 | Step | Gherkin step | Mockup |
 |---|---|---|
 | 1.0 | Given user visit on the page /accounting/general-ledger | |
 | 2.0 | When user not logged in | |
-| 3.0 | Then User redirect to login page | ac-01 |
+| 3.0 | Then User redirect to login page | ![Mockup ac-01](/images/general-ledger/ac-01.png) |
 
 ### 24.1F2 User redirect to forbidden page
 
@@ -51,7 +47,7 @@ flowchart TB
 | 1.0 | Given User already logged In | |
 | 2.0 | And User dont have permission to read general ledger | |
 | 3.0 | When User type /accounting/general-ledger into browser | |
-| 4.0 | Then User redirect to forbidden page | ac-02 |
+| 4.0 | Then User redirect to forbidden page | ![Mockup ac-02](/images/general-ledger/ac-02.png) |
 
 ### 24.1F3 User sees no account to select
 
@@ -61,7 +57,7 @@ flowchart TB
 | 2.0 | And User have permission to read general ledger report | |
 | 3.0 | And User do not have access into any account | |
 | 4.0 | When user type /accounting/general-ledger into browser | |
-| 5.0 | Then the system not shows the account | ac-03 |
+| 5.0 | Then the system not shows the account | ![Mockup ac-03](/images/general-ledger/ac-03.png) |
 
 ### 24.1S1. Displaying General Ledger Data
 
@@ -71,10 +67,10 @@ flowchart TB
 | 2.0 | And User have permission to read general ledger report | |
 | 3.0 | And User have access into account "10101.Cash on hand" | |
 | 4.0 | When User type /accounting/general-ledger into browser | |
-| 5.0 | And User selects 01-08-2026 on column date from | ac-04 |
-| 6.0 | And User selects 31-08-2026 on column date to | ac-05 |
-| 7.0 | And User selects account "10101.Cash on hand" | ac-06 |
-| 8.0 | Then the system displays the general ledger data for the selected date range and account | ac-07 |
+| 5.0 | And User selects 01-08-2026 on column date from | ![Mockup ac-04](/images/general-ledger/ac-04.png) |
+| 6.0 | And User selects 31-08-2026 on column date to | ![Mockup ac-05](/images/general-ledger/ac-05.png) |
+| 7.0 | And User selects account "10101.Cash on hand" | ![Mockup ac-06](/images/general-ledger/ac-06.png) |
+| 8.0 | Then the system displays the general ledger data for the selected date range and account | ![Mockup ac-07](/images/general-ledger/ac-07.png) |
 
 ## Referensi
 

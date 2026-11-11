@@ -26,10 +26,6 @@ flowchart TB
 
 ## Acceptance criteria
 
-<Note>
-  Kolom **Mockup** menunjuk ke file screenshot (`ac-XX`) yang dikirim terpisah dan perlu diunggah ke halaman ini.
-</Note>
-
 ### 24.3F1 Export disabled before filter is selected
 
 | Step | Gherkin step | Mockup |
@@ -37,9 +33,9 @@ flowchart TB
 | 1.0 | Given User logged In | |
 | 2.0 | And User have permission to read the general ledger report | |
 | 3.0 | And User on the general ledger page | |
-| 4.0 | And date range and account filter are not selected yet | ac-12 |
+| 4.0 | And date range and account filter are not selected yet | ![Mockup ac-12](/images/general-ledger/ac-12.png) |
 | 5.0 | When user view the "Export to Excel" button | |
-| 6.0 | Then the "Export to Excel" button is disabled | ac-13 |
+| 6.0 | Then the "Export to Excel" button is disabled | ![Mockup ac-13](/images/general-ledger/ac-13.png) |
 | 7.0 | And the system does not generate any Excel file | |
 
 ### 24.3S1. Export General Ledger as excel
@@ -50,10 +46,10 @@ flowchart TB
 | 2.0 | And User has permission to read the general ledger report | |
 | 3.0 | And User have access into account 10205-BANK BCA GIRO PUSAT 1 | |
 | 4.0 | And User is on the general ledger page | |
-| 5.0 | And date range and account filter are already applied | ac-14 |
+| 5.0 | And date range and account filter are already applied | ![Mockup ac-14](/images/general-ledger/ac-14.png) |
 | 6.0 | When the user clicks "Export to Excel" | |
 | 7.0 | Then the system generates an Excel file of the filtered general ledger | |
-| 8.0 | And the system show notifications "Successfully export general ledger" | ac-15 |
+| 8.0 | And the system show notifications "Successfully export general ledger" | ![Mockup ac-15](/images/general-ledger/ac-15.png) |
 | 9.0 | And the system downloads the file to the user's device as format excel | [Contoh hasil export (Google Sheets)](https://docs.google.com/spreadsheets/d/1Td7t0MKHDdi2doihoESl3XjzegLXVbM72D7ucsAFQxI/edit?usp=sharing) |
 
 ## Referensi
