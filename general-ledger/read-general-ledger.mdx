@@ -1,0 +1,83 @@
+---
+title: "24.1 Read General Ledger"
+sidebarTitle: "24.1 Read General Ledger"
+description: "Alur proses dan acceptance criteria membaca General Ledger."
+---
+
+## Mindmap alur
+
+```mermaid
+flowchart TB
+  A(["1.0 Start"]) --> B["2.0 User on page /accounting/general-ledger"]
+  B --> C{"3.0 Validate user already logged in"}
+  C -- Yes --> D{"4.0 Validate user has permission to read general ledger report"}
+  C -- No --> F1(["24.1F1 User redirect to login page"])
+  D -- Yes --> E["5.0 User selects filter date to"]
+  D -- No --> F2(["24.1F2 User redirect to forbidden page"])
+  E --> G["6.0 User selects filter date from"]
+  G --> H{"7.0 User selecting an account that can access"}
+  H -- Yes --> S1(["24.1S1. Displaying General Ledger Data"])
+  H -- No --> F3(["24.1F3 User sees no account to select"])
+```
+
+| Process No. | Type | Process / Validation | Yes → Next | No → Next | End? |
+|---|---|---|---|---|---|
+| 1.0 | Start | Start | 2.0 | | No |
+| 2.0 | Process | User on page /accounting/general-ledger | 3.0 | | No |
+| 3.0 | Validation | Validate user already logged in | 4.0 | 24.1F1 User redirect to login page | Yes |
+| 4.0 | Validation | Validate user has permission to read general ledger report | 5.0 | 24.1F2 User redirect to forbidden page | Yes |
+| 5.0 | Process | User selects filter date to | 6.0 | | No |
+| 6.0 | Process | User selects filter date from | 7.0 | | No |
+| 7.0 | Validation | User selecting an account that can access | 24.1S1. Displaying General Ledger Data | 24.1F3 User sees no account to select | Yes |
+
+## Acceptance criteria
+
+<Note>
+  Kolom **Mockup** menunjuk ke file screenshot (`ac-XX`) yang dikirim terpisah dan perlu diunggah ke halaman ini.
+</Note>
+
+### 24.1F1 User redirect to login page
+
+| Step | Gherkin step | Mockup |
+|---|---|---|
+| 1.0 | Given user visit on the page /accounting/general-ledger | |
+| 2.0 | When user not logged in | |
+| 3.0 | Then User redirect to login page | ac-01 |
+
+### 24.1F2 User redirect to forbidden page
+
+| Step | Gherkin step | Mockup |
+|---|---|---|
+| 1.0 | Given User already logged In | |
+| 2.0 | And User dont have permission to read general ledger | |
+| 3.0 | When User type /accounting/general-ledger into browser | |
+| 4.0 | Then User redirect to forbidden page | ac-02 |
+
+### 24.1F3 User sees no account to select
+
+| Step | Gherkin step | Mockup |
+|---|---|---|
+| 1.0 | Given User already logged In | |
+| 2.0 | And User have permission to read general ledger report | |
+| 3.0 | And User do not have access into any account | |
+| 4.0 | When user type /accounting/general-ledger into browser | |
+| 5.0 | Then the system not shows the account | ac-03 |
+
+### 24.1S1. Displaying General Ledger Data
+
+| Step | Gherkin step | Mockup |
+|---|---|---|
+| 1.0 | Given User already logged In | |
+| 2.0 | And User have permission to read general ledger report | |
+| 3.0 | And User have access into account "10101.Cash on hand" | |
+| 4.0 | When User type /accounting/general-ledger into browser | |
+| 5.0 | And User selects 01-08-2026 on column date from | ac-04 |
+| 6.0 | And User selects 31-08-2026 on column date to | ac-05 |
+| 7.0 | And User selects account "10101.Cash on hand" | ac-06 |
+| 8.0 | Then the system displays the general ledger data for the selected date range and account | ac-07 |
+
+## Referensi
+
+- Keputusan tampilan: [ADR001](/mom)
+- Hak akses CoA: [ADR002](/mom)
+- Struktur data: [Database](/general-ledger/database)

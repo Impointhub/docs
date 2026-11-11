@@ -1,0 +1,84 @@
+---
+title: "MOM"
+description: "Minutes of meeting dan keputusan arsitektur (ADR) General Ledger."
+icon: "messages-square"
+---
+
+## ADR001: Tampilan Utama General Ledger
+
+| | |
+|---|---|
+| **Tanggal** | 2026-10-15 |
+| **Nomor** | ADR001 |
+| **Person** | Aini, Bu Stefani |
+
+### Problem
+
+User kesulitan membaca dan memahami transaksi secara jelas ketika melakukan filter berdasarkan CoA karena informasi lawan akun tidak ditampilkan.
+
+General Ledger saat ini hanya menampilkan kolom Date, Reference, Master, Description, Debit, Credit, dan Balance, sehingga user kesulitan mengidentifikasi CoA yang menjadi lawan akun dalam suatu transaksi.
+
+### Option
+
+**Mempertahankan tampilan General Ledger saat ini.**
+
+- (+) Tampilan tetap sederhana dan tidak memerlukan perubahan.
+- (-) User kesulitan mengidentifikasi lawan akun ketika melakukan filter berdasarkan CoA.
+
+**Menampilkan informasi CoA dalam satu baris transaksi.**
+
+- (+) Mempermudah user mengidentifikasi CoA dan lawan akun dalam transaksi.
+- (+) Mempermudah user membaca dan memahami detail transaksi.
+- (-) Membutuhkan penyesuaian tampilan General Ledger.
+
+### Decision
+
+Menampilkan informasi CoA dalam satu baris transaksi pada tampilan utama General Ledger, dengan tetap mempertahankan kolom Date, Reference, Master, Description, Debit, Credit, dan Balance.
+
+### Reasoning
+
+Mempermudah user membaca dan memahami transaksi secara jelas, terutama ketika melakukan filter berdasarkan CoA, dengan menyediakan informasi lawan akun yang relevan.
+
+---
+
+## ADR002: Hak Akses Data General Ledger Berdasarkan Role Permission CoA
+
+| | |
+|---|---|
+| **Tanggal** | 2026-10-15 |
+| **Nomor** | ADR002 |
+| **Person** | Aini, Bu Stefani |
+
+### Problem
+
+Bu Lioni ingin memastikan bahwa Ce Feifei hanya dapat melihat data transaksi pada CoA yang telah diberikan akses kepadanya.
+
+Data transaksi yang dapat diakses oleh Bu Lioni dan Ce Feifei dapat berbeda, termasuk nominal transaksi yang ditampilkan, sesuai dengan hak akses masing-masing user.
+
+Diperlukan pembatasan akses untuk menjaga kerahasiaan data transaksi Bu Lioni agar tidak dapat dilihat oleh user yang tidak memiliki hak akses.
+
+### Option
+
+**Menampilkan seluruh data General Ledger kepada semua user.**
+
+- (+) Implementasi lebih sederhana.
+- (-) Data transaksi dapat diakses oleh user yang tidak memiliki hak akses.
+- (-) Berisiko mengungkap informasi keuangan yang bersifat rahasia.
+
+**Menampilkan data General Ledger berdasarkan hak akses CoA setiap user.**
+
+- (+) Menjaga kerahasiaan data transaksi.
+- (+) Memastikan setiap user hanya dapat melihat transaksi sesuai dengan hak aksesnya.
+- (-) Membutuhkan penyesuaian mekanisme penyaringan data berdasarkan role permission CoA.
+
+### Decision
+
+Menampilkan data General Ledger berdasarkan hak akses (role permission) CoA masing-masing user.
+
+User hanya dapat melihat transaksi yang termasuk dalam CoA yang memiliki izin akses untuk user tersebut.
+
+### Reasoning
+
+Menjaga kerahasiaan data transaksi Bu Lioni dengan membatasi informasi yang dapat diakses oleh setiap user sesuai dengan hak aksesnya.
+
+Memastikan data dan nominal transaksi yang ditampilkan pada General Ledger sesuai dengan otorisasi masing-masing user.

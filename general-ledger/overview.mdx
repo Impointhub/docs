@@ -1,0 +1,29 @@
+---
+title: "Overview"
+description: "Daftar skenario General Ledger."
+---
+
+Modul **General Ledger** memiliki tiga fitur. Kode skenario memakai awalan `F` untuk skenario gagal dan `S` untuk skenario sukses.
+
+## List scenario
+
+| Module | Feature | Scenario |
+|--------|---------|----------|
+| General Ledger | [24.1 Read General Ledger](/general-ledger/read-general-ledger) | 24.1F1 User redirect to login page |
+| | | 24.1F2 User redirect to forbidden page |
+| | | 24.1F3 User sees no account to select |
+| | | 24.1S1. Displaying General Ledger Data |
+| | [24.2 Filter General Ledger](/general-ledger/filter-general-ledger) | 24.2S1. Displaying data according to filter |
+| | [24.3 Export General Ledger](/general-ledger/export-general-ledger) | 24.3F1 Export disabled before filter is selected |
+| | | 24.3S1. Export General Ledger as excel |
+
+## Halaman terkait
+
+<Columns cols={2}>
+  <Card title="Acceptance criteria" icon="list-checks" href="/general-ledger/read-general-ledger">
+    Gherkin step per skenario ada di halaman tiap fitur.
+  </Card>
+  <Card title="Database" icon="database" href="/general-ledger/database">
+    Kolom, aturan, dan sample data.
+  </Card>
+</Columns>

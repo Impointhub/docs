@@ -1,0 +1,183 @@
+---
+title: "Database"
+description: "Struktur kolom, aturan, dan sample data General Ledger."
+icon: "database"
+---
+
+## DB-1 General Ledger Filter
+
+| Column Frontend | Type | Rules | Sample Data | Tujuan | Notes |
+|---|---|---|---|---|---|
+| Date From | DATE | Wajib diisi. Format dd-mm-yyyy. Kosong saat halaman dibuka. | 01-08-2026 | Batas awal periode ledger | Dipakai 24.1S1, 24.2S1, 24.2F1, 24.3S1. Juga menjadi batas perhitungan Opening Balance. |
+| Date To | DATE | Wajib diisi. Format dd-mm-yyyy. Kosong saat halaman dibuka. | 31-08-2026 | Batas akhir periode ledger | Dipakai 24.1S1, 24.2S1, 24.2F1, 24.3S1. |
+| Account | VARCHAR(100) | Wajib dipilih. Daftar hanya berisi akun yang boleh diakses user (DB-4). Tampil "kode - nama". Satu akun per tampilan. | 10101 - Cash on hand | Memilih akun CoA yang ledger-nya ditampilkan | Jika user tidak punya akses akun, daftar kosong (24.1F3, 24.2F1). |
+| Export to Excel (button) | - | Nonaktif sampai Date From, Date To, dan Account terisi. Aktif setelah ketiganya terisi. | - | Mengunduh ledger sesuai filter | 24.3S1. (aktif), 24.3F1 (nonaktif). |
+
+## DB-2 General Ledger Data
+
+| Column Frontend | Type | Rules | Sample Data | Tujuan | Notes |
+|---|---|---|---|---|---|
+| Date | DATE | Autofill dari form reference. Hanya transaksi akun terpilih dengan tanggal dalam Date From s/d Date To, urut tanggal. | 03-08-2026 | Tanggal transaksi terjadi | |
+| Reference | VARCHAR(20) | Autofill dari form reference. | CI/2608/006 | Nomor dokumen sumber, untuk ditelusuri | Prefix CI/CO untuk Cash, BI/BO untuk Bank. |
+| Master | VARCHAR(100) | Autofill dari form reference. | Budi Santoso | Customer / supplier / pihak pada transaksi | Diperbesar dari VARCHAR(10) karena mockup menampilkan nama. |
+| CoA (counter account) | VARCHAR(100) | Autofill dari form reference. Akun lawan dari akun terpilih, format "kode - nama". Tampil satu baris dengan transaksi. | 40201 - Service Revenue | User langsung tahu lawan akun transaksi (ADR001) | Kolom baru, sebelumnya tidak ada di database. |
+| Description | VARCHAR(255) | Autofill dari form reference. | Service payment | Keterangan transaksi | |
+| Debit | DECIMAL(18,2) | Autofill dari form reference. Tampil "-" jika 0. | 26250000.00 | Nilai debit transaksi | |
+| Credit | DECIMAL(18,2) | Autofill dari form reference. Tampil "-" jika 0. | 0.00 | Nilai kredit transaksi | |
+| Balance | DECIMAL(18,2) | Dihitung otomatis = Balance baris sebelumnya + Debit - Credit. Baris pertama memakai Opening Balance. | 123500000.00 | Saldo berjalan setelah transaksi ini | |
+| Opening Balance | DECIMAL(18,2) | Dihitung otomatis, bukan input = total (Debit - Credit) akun terpilih untuk semua transaksi sebelum Date From. | 100500000.00 | Saldo awal periode | Tampil di baris pertama tabel. |
+| Total Debit / Total Credit | DECIMAL(18,2) | Dihitung otomatis = jumlah Debit dan jumlah Credit pada periode. | 167250000.00 / 24000000.00 | Total pergerakan periode | |
+| Ending Balance | DECIMAL(18,2) | Dihitung otomatis = Opening Balance + Total Debit - Total Credit. Sama dengan Balance baris terakhir. | 243750000.00 | Saldo akhir periode | |
+
+## DB-3 Account (sumber dropdown Account)
+
+| Column Frontend | Type | Rules | Sample Data | Tujuan |
+|---|---|---|---|---|
+| Account Code | VARCHAR(5) | Unik. | 10101 | Kode CoA |
+| Account Name | VARCHAR(100) | Wajib. | Cash on hand | Nama CoA |
+| Account Label (frontend) | - | Dibentuk otomatis = Account Code + " - " + Account Name. | 10101 - Cash on hand | Teks yang tampil di dropdown Account |
+
+## DB-4 User Account Access (role permission CoA)
+
+| Column Frontend | Type | Rules | Sample Data | Tujuan | Notes |
+|---|---|---|---|---|---|
+| User | VARCHAR(100) | Wajib. | Aini | Pemilik hak akses | |
+| Permission Read General Ledger | BOOLEAN | Yes / No. No: halaman Access Denied (24.1F2). | Yes | Syarat membuka /accounting/general-ledger | Belum login diarahkan ke halaman login (24.1F1), berdasarkan sesi, bukan tabel ini. |
+| Accessible Accounts | LIST of Account Code | Hanya akun ini yang muncul di dropdown Account dan datanya tampil. Kosong: tampil pesan "No account is assigned to you..." (24.1F3, 24.2F1). | 10101, 10205 | Menjaga kerahasiaan data per akun (ADR002) | |
+
+## DB-5 Export & System Message
+
+| Column Frontend | Type | Rules | Sample Data | Tujuan | Notes |
+|---|---|---|---|---|---|
+| Export File Name | VARCHAR(100) | `general-ledger_{Account Code}_{Date From}_{Date To}.xlsx`, tanggal format yyyy-mm-dd. | general-ledger_10101_2026-08-01_2026-08-31.xlsx | Nama file hasil export | 24.3S1. |
+| Export Content | - | Satu sheet "General Ledger": Opening Balance, baris transaksi, Ending Balance sesuai filter. | - | Isi file export | 24.3S1. |
+| Notification Export | VARCHAR(100) | Tampil setelah file berhasil dibuat. Tanpa kode scenario. | Successfully export general ledger | Konfirmasi export berhasil | 24.3S1. |
+| Message - Filter Belum Lengkap | VARCHAR(150) | Tampil selama Date From, Date To, atau Account belum terisi. | Select Date From, Date To, and an account to display the general ledger. | Arahan untuk user | 24.1S1, 24.3F1 |
+| Message - Tidak Ada Akses Akun | VARCHAR(150) | Tampil jika Accessible Accounts kosong. | No account is assigned to you. Ask your administrator for account access. | Menjelaskan alasan dropdown kosong | 24.1F3, 24.2F1 |
+| Message - Tidak Ada Transaksi | VARCHAR(100) | Tampil jika filter lengkap tetapi tidak ada transaksi pada periode. | No transactions in this date range. | Menjelaskan tabel kosong | |
+
+## Sample database
+
+### SD-1 Contoh Filter
+
+| Case | Date From | Date To | Account | Hasil | Scenario |
+|---|---|---|---|---|---|
+| 1 | 2026-08-01 | 2026-08-31 | 10101 - Cash on hand | 16 transaksi tampil | 24.1S1 |
+| 2 | 2026-08-01 | 2026-08-15 | 10205 - BANK BCA GIRO PUSAT 1 | 8 transaksi tampil | 24.2S1 |
+| 3 | 2026-08-01 | 2026-08-31 | 10101 - Cash on hand | File Excel diunduh, notifikasi "Successfully export general ledger" | 24.3S1. |
+| 4 | | | | Tombol Export to Excel nonaktif, tidak ada file | 24.3F1 |
+| 5 | 2026-08-01 | 2026-08-15 | (tidak ada pilihan akun) | Data tidak tampil, pesan tidak ada akses akun | 24.1F3 / 24.2F1 |
+
+### SD-2 Contoh Account
+
+| Account Code | Account Name | Account Label (frontend) |
+|---|---|---|
+| 10101 | Cash on hand | 10101 - Cash on hand |
+| 10102 | Petty cash | 10102 - Petty cash |
+| 10201 | BANK MANDIRI TABUNGAN 1 | 10201 - BANK MANDIRI TABUNGAN 1 |
+| 10202 | BANK MANDIRI GIRO PUSAT | 10202 - BANK MANDIRI GIRO PUSAT |
+| 10203 | BANK BNI GIRO PUSAT | 10203 - BANK BNI GIRO PUSAT |
+| 10204 | BANK BRI TABUNGAN 1 | 10204 - BANK BRI TABUNGAN 1 |
+| 10205 | BANK BCA GIRO PUSAT 1 | 10205 - BANK BCA GIRO PUSAT 1 |
+| 10206 | BANK BCA GIRO CABANG SURABAYA | 10206 - BANK BCA GIRO CABANG SURABAYA |
+| 10207 | BANK CIMB NIAGA OPERASIONAL | 10207 - BANK CIMB NIAGA OPERASIONAL |
+| 10208 | BANK PERMATA TABUNGAN | 10208 - BANK PERMATA TABUNGAN |
+
+### SD-3 Contoh User Account Access
+
+| User | Permission Read General Ledger | Accessible Accounts | Skenario pakai |
+|---|---|---|---|
+| Aini | Yes | 10101, 10205 | 24.1S1, 24.2S1, 24.3S1. |
+| Ce Feifei | Yes | 10101, 10102, 10205 | 24.1S1, 24.2S1 (hanya akun yang diizinkan) |
+| Bu Lioni | Yes | 10101 s/d 10208 (semua akun) | 24.1S1 |
+| Staff Finance A | Yes | (tidak ada) | 24.1F3, 24.2F1 |
+| Staff Finance B | No | (tidak ada) | 24.1F2 |
+
+### SD-4 Transaksi sumber (akun 10101 dan 10205)
+
+| Account Code | Date | Reference | Master | CoA (counter account) | Description | Debit | Credit |
+|---|---|---|---|---|---|---|---|
+| 10101 | 2026-07-24 | CI/2607/001 | Budi Santoso | 40201 - Service Revenue | Service payment | 26,250,000 | 0 |
+| 10101 | 2026-07-26 | CI/2607/002 | UD Berkah | 40201 - Service Revenue | Service payment | 28,500,000 | 0 |
+| 10101 | 2026-07-28 | CI/2607/003 | UD Berkah | 40201 - Service Revenue | Service payment | 27,000,000 | 0 |
+| 10101 | 2026-07-30 | CI/2607/004 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 18,750,000 | 0 |
+| 10101 | 2026-08-01 | CO/2608/005 | Gojek | 60401 - Transport Expense | Delivery fee | 0 | 3,250,000 |
+| 10101 | 2026-08-03 | CI/2608/006 | Budi Santoso | 40201 - Service Revenue | Service payment | 26,250,000 | 0 |
+| 10101 | 2026-08-05 | CI/2608/007 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 24,000,000 | 0 |
+| 10101 | 2026-08-07 | CI/2608/008 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 13,500,000 | 0 |
+| 10101 | 2026-08-09 | CO/2608/009 | Gojek | 60401 - Transport Expense | Delivery fee | 0 | 2,500,000 |
+| 10101 | 2026-08-11 | CI/2608/010 | Toko Makmur | 40101 - Sales Revenue | Customer payment | 19,500,000 | 0 |
+| 10101 | 2026-08-13 | CO/2608/011 | PLN | 60201 - Electricity Expense | Pay electricity bill | 0 | 4,250,000 |
+| 10101 | 2026-08-15 | CO/2608/012 | Staff | 60101 - Salary Expense | Wages | 0 | 3,500,000 |
+| 10101 | 2026-08-17 | CI/2608/013 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 9,000,000 | 0 |
+| 10101 | 2026-08-19 | CI/2608/014 | UD Berkah | 40201 - Service Revenue | Service payment | 26,250,000 | 0 |
+| 10101 | 2026-08-21 | CI/2608/015 | CV Karya | 40301 - Other Income | Commission received | 4,500,000 | 0 |
+| 10101 | 2026-08-23 | CI/2608/016 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 18,000,000 | 0 |
+| 10101 | 2026-08-25 | CI/2608/017 | CV Karya | 40301 - Other Income | Commission received | 4,500,000 | 0 |
+| 10101 | 2026-08-27 | CO/2608/018 | Gojek | 60401 - Transport Expense | Delivery fee | 0 | 750,000 |
+| 10101 | 2026-08-29 | CI/2608/019 | Budi Santoso | 40201 - Service Revenue | Service payment | 21,750,000 | 0 |
+| 10101 | 2026-08-31 | CO/2608/020 | Telkom | 60202 - Internet Expense | Internet bill | 0 | 9,750,000 |
+| 10205 | 2026-07-24 | BI/2607/001 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 18,750,000 | 0 |
+| 10205 | 2026-07-26 | BI/2607/002 | CV Karya | 40301 - Other Income | Commission received | 6,750,000 | 0 |
+| 10205 | 2026-07-28 | BI/2607/003 | Budi Santoso | 40201 - Service Revenue | Service payment | 6,000,000 | 0 |
+| 10205 | 2026-07-30 | BI/2607/004 | UD Berkah | 40201 - Service Revenue | Service payment | 5,250,000 | 0 |
+| 10205 | 2026-08-01 | BO/2608/005 | Telkom | 60202 - Internet Expense | Internet bill | 0 | 8,500,000 |
+| 10205 | 2026-08-03 | BI/2608/006 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 20,250,000 | 0 |
+| 10205 | 2026-08-05 | BO/2608/007 | Staff | 60101 - Salary Expense | Wages | 0 | 5,500,000 |
+| 10205 | 2026-08-07 | BI/2608/008 | UD Berkah | 40201 - Service Revenue | Service payment | 29,250,000 | 0 |
+| 10205 | 2026-08-09 | BO/2608/009 | PLN | 60201 - Electricity Expense | Pay electricity bill | 0 | 1,000,000 |
+| 10205 | 2026-08-11 | BI/2608/010 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 13,500,000 | 0 |
+| 10205 | 2026-08-13 | BI/2608/011 | CV Karya | 40301 - Other Income | Commission received | 4,500,000 | 0 |
+| 10205 | 2026-08-15 | BO/2608/012 | PLN | 60201 - Electricity Expense | Pay electricity bill | 0 | 6,000,000 |
+| 10205 | 2026-08-17 | BI/2608/013 | UD Berkah | 40201 - Service Revenue | Service payment | 30,000,000 | 0 |
+| 10205 | 2026-08-19 | BI/2608/014 | UD Berkah | 40201 - Service Revenue | Service payment | 30,000,000 | 0 |
+| 10205 | 2026-08-21 | BO/2608/015 | Gedung Prima | 60501 - Rent Expense | Office rent | 0 | 7,750,000 |
+| 10205 | 2026-08-23 | BI/2608/016 | Budi Santoso | 40201 - Service Revenue | Service payment | 26,250,000 | 0 |
+| 10205 | 2026-08-25 | BO/2608/017 | CV Sinar Jaya | 60301 - Office Supplies | Buy office supplies | 0 | 9,750,000 |
+| 10205 | 2026-08-27 | BI/2608/018 | CV Karya | 40301 - Other Income | Commission received | 4,500,000 | 0 |
+| 10205 | 2026-08-29 | BI/2608/019 | Budi Santoso | 40201 - Service Revenue | Service payment | 21,750,000 | 0 |
+| 10205 | 2026-08-31 | BI/2608/020 | Toko Makmur | 40101 - Sales Revenue | Customer payment | 6,000,000 | 0 |
+
+### SD-5 General Ledger data untuk 24.1S1
+
+Akun 10101, 01-08-2026 s/d 31-08-2026. Opening Balance: 100,500,000.
+
+| Date | Reference | Master | CoA (counter account) | Description | Debit | Credit | Balance |
+|---|---|---|---|---|---|---|---|
+| 01-08-2026 | | | | Opening Balance | | | 100,500,000 |
+| 01-08-2026 | CO/2608/005 | Gojek | 60401 - Transport Expense | Delivery fee | 0 | 3,250,000 | 97,250,000 |
+| 03-08-2026 | CI/2608/006 | Budi Santoso | 40201 - Service Revenue | Service payment | 26,250,000 | 0 | 123,500,000 |
+| 05-08-2026 | CI/2608/007 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 24,000,000 | 0 | 147,500,000 |
+| 07-08-2026 | CI/2608/008 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 13,500,000 | 0 | 161,000,000 |
+| 09-08-2026 | CO/2608/009 | Gojek | 60401 - Transport Expense | Delivery fee | 0 | 2,500,000 | 158,500,000 |
+| 11-08-2026 | CI/2608/010 | Toko Makmur | 40101 - Sales Revenue | Customer payment | 19,500,000 | 0 | 178,000,000 |
+| 13-08-2026 | CO/2608/011 | PLN | 60201 - Electricity Expense | Pay electricity bill | 0 | 4,250,000 | 173,750,000 |
+| 15-08-2026 | CO/2608/012 | Staff | 60101 - Salary Expense | Wages | 0 | 3,500,000 | 170,250,000 |
+| 17-08-2026 | CI/2608/013 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 9,000,000 | 0 | 179,250,000 |
+| 19-08-2026 | CI/2608/014 | UD Berkah | 40201 - Service Revenue | Service payment | 26,250,000 | 0 | 205,500,000 |
+| 21-08-2026 | CI/2608/015 | CV Karya | 40301 - Other Income | Commission received | 4,500,000 | 0 | 210,000,000 |
+| 23-08-2026 | CI/2608/016 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 18,000,000 | 0 | 228,000,000 |
+| 25-08-2026 | CI/2608/017 | CV Karya | 40301 - Other Income | Commission received | 4,500,000 | 0 | 232,500,000 |
+| 27-08-2026 | CO/2608/018 | Gojek | 60401 - Transport Expense | Delivery fee | 0 | 750,000 | 231,750,000 |
+| 29-08-2026 | CI/2608/019 | Budi Santoso | 40201 - Service Revenue | Service payment | 21,750,000 | 0 | 253,500,000 |
+| 31-08-2026 | CO/2608/020 | Telkom | 60202 - Internet Expense | Internet bill | 0 | 9,750,000 | 243,750,000 |
+| | | | | **Total** | **167,250,000** | **24,000,000** | |
+| | | | | **Ending Balance** | | | **243,750,000** |
+
+### SD-6 General Ledger data untuk 24.2S1
+
+Akun 10205, 01-08-2026 s/d 15-08-2026. Opening Balance: 36,750,000.
+
+| Date | Reference | Master | CoA (counter account) | Description | Debit | Credit | Balance |
+|---|---|---|---|---|---|---|---|
+| 01-08-2026 | | | | Opening Balance | | | 36,750,000 |
+| 01-08-2026 | BO/2608/005 | Telkom | 60202 - Internet Expense | Internet bill | 0 | 8,500,000 | 28,250,000 |
+| 03-08-2026 | BI/2608/006 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 20,250,000 | 0 | 48,500,000 |
+| 05-08-2026 | BO/2608/007 | Staff | 60101 - Salary Expense | Wages | 0 | 5,500,000 | 43,000,000 |
+| 07-08-2026 | BI/2608/008 | UD Berkah | 40201 - Service Revenue | Service payment | 29,250,000 | 0 | 72,250,000 |
+| 09-08-2026 | BO/2608/009 | PLN | 60201 - Electricity Expense | Pay electricity bill | 0 | 1,000,000 | 71,250,000 |
+| 11-08-2026 | BI/2608/010 | PT Maju Bersama | 40101 - Sales Revenue | Customer transfer | 13,500,000 | 0 | 84,750,000 |
+| 13-08-2026 | BI/2608/011 | CV Karya | 40301 - Other Income | Commission received | 4,500,000 | 0 | 89,250,000 |
+| 15-08-2026 | BO/2608/012 | PLN | 60201 - Electricity Expense | Pay electricity bill | 0 | 6,000,000 | 83,250,000 |
+| | | | | **Total** | **67,500,000** | **21,000,000** | |
+| | | | | **Ending Balance** | | | **83,250,000** |
