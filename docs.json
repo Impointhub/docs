@@ -13,10 +13,7 @@
       {
         "group": "Pengantar",
         "pages": [
-          "index",
-          "product-vision",
-          "mom",
-          "sitemap"
+          "index"
         ],
         "icon": "book-open"
       },
@@ -79,5 +76,19 @@
       "linkedin": "https://linkedin.com/company/mintlify"
     }
   },
-  "description": "Dokumentasi PRD General Ledger Simple Accounting."
+  "description": "Dokumentasi PRD General Ledger Simple Accounting.",
+  "redirects": [
+    {
+      "source": "/product-vision",
+      "destination": "/general-ledger/overview#product-vision"
+    },
+    {
+      "source": "/mom",
+      "destination": "/general-ledger/overview#mom"
+    },
+    {
+      "source": "/sitemap",
+      "destination": "/general-ledger/overview#sitemap"
+    }
+  ]
 }
