@@ -11,31 +11,14 @@
   "navigation": {
     "pages": [
       {
-        "group": "Pengantar",
-        "pages": [
-          "index"
-        ],
-        "icon": "book-open"
-      },
-      {
-        "group": "General Ledger",
-        "icon": "book-open",
-        "pages": [
-          "general-ledger/overview",
-          "general-ledger/read-general-ledger",
-          "general-ledger/filter-general-ledger",
-          "general-ledger/export-general-ledger",
-          "general-ledger/database"
-        ]
-      },
-      {
         "group": "Thinkaction",
         "pages": [
           "thinkaction/overview",
           "thinkaction/embed-photo-unsplash",
           "thinkaction/delete-comment",
           "thinkaction/multiple-tagging",
-          "thinkaction/comment-on-progress"
+          "thinkaction/comment-on-progress",
+          "thinkaction/database"
         ]
       }
     ]

@@ -1,0 +1,40 @@
+---
+title: "Database"
+sidebarTitle: "Database"
+description: "Struktur data goals dan comment pada Thinkaction beserta contoh data."
+---
+
+## Goals
+
+| Field | Tipe | Keterangan |
+| --- | --- | --- |
+| _id | string | ID goal |
+| specific, measurable, achievable, relevant, time | string | Kolom SMART dari form Create Goals |
+| smart | object | Ringkasan SMART |
+| thumbnail_url | string | URL foto goal |
+| thumbnail_source | object | Sumber foto (Unsplash: fotografer, link, dll.) |
+| visibility | string | Privacy goal |
+| status | string | Status goal |
+| progress[] | array | Daftar progress (id berupa UUIDv7 string) |
+| created_by_id | string | ID pembuat |
+| created_at, updated_at | datetime | Waktu dibuat dan diubah |
+
+## Comment
+
+| Field | Tipe | Keterangan |
+| --- | --- | --- |
+| _id | string | ID komentar |
+| goal_id | string | Goal yang dikomentari |
+| parent_id | string / null | Komentar induk (untuk balasan) |
+| comment | string | Isi komentar |
+| created_by_id | string | Pembuat komentar; hanya dia yang bisa menghapus (5.3) |
+| mentions[] | array | Daftar user yang ditag: `_id`, `label`, `link` (5.4) |
+| progress_id | string / null | Progress yang dikomentari (5.5) |
+| created_at, updated_at | datetime | Waktu dibuat dan diubah |
+
+## Contoh data komentar
+
+| Komentar | Pembuat | Mentions | Progress |
+| --- | --- | --- | --- |
+| keep it up | @nraini | - | ya (5.5) |
+| balasan ke @helmi.cest | @tigermom | @helmi.cest, @nraini, @diianok | - |

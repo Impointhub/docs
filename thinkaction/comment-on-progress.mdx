@@ -8,27 +8,25 @@ description: "Alur proses dan acceptance criteria berkomentar dari progress deng
 
 ```mermaid
 flowchart TB
-  A(["1.0 Start"]) --> B["2.0 User on the Thinkaction feed page"]
-  B --> C{"3.0 User is logged in"}
-  C -- Yes --> D["4.0 User views the progress of @tigermom"]
+  A(["1.0 Start"]) --> B["2.0 User on the page feed Thinkaction"]
+  B --> C{"3.0 User already logged in"}
+  C -- Yes --> D["4.0 User views the progress of @tigermom on the home page"]
   C -- No --> F1(["5.5F1 User cannot see the field for writing comments"])
-  D --> E["5.0 User clicks the Comment button on the progress"]
-  E --> F["6.0 System opens the comment page of the goal with the progress embedded"]
-  F --> G["7.0 User types keep it up"]
-  G --> H["8.0 User clicks Post"]
-  H --> S1(["5.5S1 Comment is published and the progress is shown in the comment list"])
+  D --> E["5.0 User clicks the comment button in the bottom corner"]
+  E --> F["6.0 User types keep it up in the comment section"]
+  F --> G["7.0 User clicks Post"]
+  G --> S1(["5.5S1 Comment is published and the progress is displayed on the comment list page"])
 ```
 
 | Process No. | Type | Process / Validation | Yes → Next | No → Next | End? |
 | --- | --- | --- | --- | --- | --- |
 | 1.0 | Start | Start | 2.0 |  | No |
-| 2.0 | Process | User on the Thinkaction feed page | 3.0 |  | No |
-| 3.0 | Validation | User is logged in | 4.0 | 5.5F1 User cannot see the field for writing comments | Yes |
-| 4.0 | Process | User views the progress of @tigermom | 5.0 |  | No |
-| 5.0 | Process | User clicks the "Comment" button at the bottom corner of the progress | 6.0 |  | No |
-| 6.0 | Process | System opens the comment page of the goal with the progress embedded above the comment field | 7.0 |  | No |
-| 7.0 | Process | User types "keep it up" in the comment field | 8.0 |  | No |
-| 8.0 | Process | User clicks "Post" | 5.5S1 The comment is published and the progress is shown in the comment list |  | Yes |
+| 2.0 | Process | User on the page feed Thinkaction | 3.0 |  | No |
+| 3.0 | Validation | Validate user already logged in | 4.0 | 5.5F1 User cannot see the field for writing comments | Yes |
+| 4.0 | Process | User views the @tigermom progress on the home page | 5.0 |  | No |
+| 5.0 | Process | User clicks the comment button in the bottom corner | 6.0 |  | No |
+| 6.0 | Process | User types "keep it up" in the comments section | 7.0 |  | No |
+| 7.0 | Process | User clicks "post" | 5.5S1 Comment will be published, and the progress associated with it will be displayed on the comment list page |  | Yes |
 
 ## Acceptance criteria
 
@@ -36,27 +34,22 @@ flowchart TB
 
 | Step | Gherkin step | Mockup |
 | --- | --- | --- |
-| 1.0 | Given user is not logged in to the Thinkaction app |  |
-| 2.0 | When user opens the Thinkaction feed page |  |
-| 3.0 | Then the feed page is displayed without the field for writing comments |  |
+| 1.0 | Given the user is not logged in to ThinkAction App | <img src="https://cdn.corenexis.com/f/130mucQv.png" alt="Mockup 5.5F1 step 1" /> |
+| 2.0 | When the user opens the ThinkAction Feed page | <img src="https://cdn.corenexis.com/f/ang4UEAp.png" alt="Mockup 5.5F1 step 2" /> |
+| 3.0 | Then the system displays the Feed page without the field for writing comments | <img src="https://cdn.corenexis.com/f/fpZ2CN59.png" alt="Mockup 5.5F1 step 3" /> |
 
-### 5.5S1 User comments on a progress and the progress is embedded in the comment list
+### 5.5S1 Comment will be published, and the progress associated with it will be displayed on the comment list page
 
 | Step | Gherkin step | Mockup |
 | --- | --- | --- |
-| 1.0 | Given user @nraini is logged in to the Thinkaction app |  |
-| 2.0 | And user @nraini is on the feed page |  |
-| 3.0 | When user views the progress posted by @tigermom | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/progress-01-story-tombol-comment.png" alt="Progress @tigermom dengan tombol Comment" /> |
-| 4.0 | And user clicks the "Comment" button at the bottom corner of the progress |  |
-| 5.0 | Then the system opens the comment page of the goal of @tigermom | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/progress-02-halaman-komentar-embed.png" alt="Halaman komentar goal dengan progress terlampir" /> |
-| 6.0 | And the system shows the commented progress as an embed above the comment field |  |
-| 7.0 | When user types "keep it up" in the comment field | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/progress-03-isi-komentar.png" alt="Komentar keep it up diketik" /> |
-| 8.0 | And user clicks "POST" |  |
-| 9.0 | Then the system publishes the comment | <img src="https://raw.githubusercontent.com/impointhub/thinkaction-images/main/progress-04-komentar-dengan-progress.png" alt="Komentar tampil dengan kartu progress" /> |
-| 10.0 | And the system shows the progress card labeled "PROGRESS" in the comment on the comment list page |  |
+| 1.0 | Given the user is logged in to ThinkAction App and is on the Feed page | <img src="https://cdn.corenexis.com/f/TVJokzwI.png" alt="Mockup 5.5S1 step 1" /> |
+| 2.0 | When the user views the progress update posted by @tigermom on the Home page | <img src="https://cdn.corenexis.com/f/521b6FZU.png" alt="Mockup 5.5S1 step 2" /> |
+| 3.0 | And the user clicks the comment button at the bottom corner of the progress update |  |
+| 4.0 | And the user enters "keep it up" in the comment field |  |
+| 5.0 | And the user clicks the Post button to publish the comment |  |
+| 6.0 | Then the system publishes the comment and displays the associated progress update on the comment list page |  |
 
 ## Referensi
 
-- Tombol "Back to progress" mengembalikan user ke progress.
-- Foto progress bisa dilepas dengan tombol silang sebelum Post, sehingga komentar tampil sebagai komentar biasa.
-- Jika progress sudah dihapus, kartu menampilkan "Progress no longer available".
+- Alur ini mengikuti ADR001: klik komentar membuka halaman komentar goal dengan progress yang dikomentari tampil sebagai embed.
+- Struktur data komentar: [Database](/thinkaction/database).

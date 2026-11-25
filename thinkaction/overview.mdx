@@ -14,14 +14,14 @@ Update beberapa fitur di Thinkaction:
 1. Embed foto Unsplash
 2. Komentar pada progress
 3. Komentar dengan multiple tagging
-4. Hapus komentar
+4. Delete / archive comment
 
 ### Measurable
 
 1. Foto vision board bisa diakses dengan mudah.
 2. User bisa berkomentar di progress satu sama lain.
 3. Bug tagging yang saat ini hanya menandai 1 user diperbaiki, sehingga bisa menandai banyak user.
-4. User bisa menghapus komentar yang salah ketik.
+4. User bisa menghapus (delete / archive) komentar yang salah ketik.
 
 ### Achievable
 
@@ -33,7 +33,7 @@ Meningkatkan user friendliness dan interaksi pengguna.
 
 ### Time
 
-30 September.
+30 Sept.
 
 ## Sitemap
 
@@ -77,17 +77,18 @@ Fitur bertanda **baru** adalah cakupan dokumentasi ini.
 
 ## List scenario
 
-| Module | Feature | Scenario |
-| --- | --- | --- |
-| Goals | [6.5 Embed Photo Unsplash](/thinkaction/embed-photo-unsplash) | 6.5F1 User cannot see the "Create Goals" button |
-|  |  | 6.5F2 User sees notification "Please complete all form before continue" |
-|  |  | 6.5S1 User successfully creates a goal with an Unsplash photo and is redirected to the feed page |
-| Comment | [5.3 Delete Comment](/thinkaction/delete-comment) | 5.3F1 User cannot delete a comment when not logged in |
-|  |  | 5.3S1 User deletes own comment and the comment is removed from the comment list |
-|  | [5.4 Multiple Tagging](/thinkaction/multiple-tagging) | 5.4F1 User cannot write a comment when not logged in |
-|  |  | 5.4S1 User mentions two users in one comment and both are notified |
-|  | [5.5 Comment on Progress](/thinkaction/comment-on-progress) | 5.5F1 User cannot see the field for writing comments |
-|  |  | 5.5S1 User comments on a progress and the progress is embedded in the comment list |
+| Module | Feature | Scenario | Developer Notes | AP Notes |
+| --- | --- | --- | --- | --- |
+| Goals | [6.5 Embed Photo Unsplash](/thinkaction/embed-photo-unsplash) | 6.5F1 User cannot see the "Create Goals" button | Fitur sudah ada di app saat ini, tidak perlu dikerjakan |  |
+|  |  | 6.5F2 User can see notification "Please complete all form before continue" | Fitur sudah ada di app saat ini, tidak perlu dikerjakan |  |
+|  |  | 6.5S1 User successfully created a goal and was redirected to the feed page | Develop / gunakan API Unsplash |  |
+| Comment | [5.3 Delete Comment](/thinkaction/delete-comment) | 5.3F1 User cannot see the "Create Goals" button | Sudah ada |  |
+|  |  | 5.3F2 The user can't see "Trash button" |  |  |
+|  |  | 5.3S1 The comment is removed from the comment list | Develop | Need scenario: User A bisa delete comment dari User A; User A tidak boleh delete comment dari User B |
+|  | [5.4 Multiple Tagging](/thinkaction/multiple-tagging) | 5.4F1 User cannot see the "Create Goals" button | Sudah ada |  |
+|  |  | 5.4S1 The comment is successfully posted, and the mentioned users receive a notification | Develop / update [mention form](https://dev.pointhub.net/library/papp/docs/forms/mention), lalu pull di project Thinkaction | Tidak hanya berhasil send notification, tetapi link @user aktif ketika ada dot "." |
+|  | [5.5 Comment on Progress](/thinkaction/comment-on-progress) | 5.5F1 User cannot see the field for writing comments | Sudah ada |  |
+|  |  | 5.5S1 Comment will be published, and the progress associated with it will be displayed on the comment list page | Develop | Di tombol comment, ketika ada caption, UI seperti apa |
 
 ## Hasil rapat (MOM)
 
@@ -108,7 +109,7 @@ Tanggal rapat: 12 Oktober 2026. Peserta: Aini, Bu Kartika.
   </Card>
 
   <Card title="5.3 Delete Comment" icon="trash-2" href="/thinkaction/delete-comment">
-    Hapus komentar sendiri dengan Undo 5 detik.
+    Hapus komentar sendiri (hanya pembuat komentar bisa melihat tombol sampah).
   </Card>
 
   <Card title="5.4 Multiple Tagging" icon="at-sign" href="/thinkaction/multiple-tagging">
@@ -117,5 +118,9 @@ Tanggal rapat: 12 Oktober 2026. Peserta: Aini, Bu Kartika.
 
   <Card title="5.5 Comment on Progress" icon="message-circle" href="/thinkaction/comment-on-progress">
     Komentar dari progress dengan embed progress.
+  </Card>
+
+  <Card title="Database" icon="database" href="/thinkaction/database">
+    Struktur data goals dan comment.
   </Card>
 </Columns>
